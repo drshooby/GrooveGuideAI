@@ -157,4 +157,5 @@ input[type="radio"] {
     color: black;
     background-color: white;
     font-weight: bold;
+    border-radius: 20px;
 }

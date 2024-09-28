@@ -6,10 +6,14 @@ const inputText = document.getElementById('user-input')
 const submitBtn = document.getElementById('submit-btn')
 const doneBtn = document.getElementById('finish-btn')
 
+const searchChoice = document.getElementById('search-choice')
 const inputContainer = document.getElementById('user-input-container')
 const output1 = document.getElementById('output1')
 const output2 = document.getElementById('output2')
 const output3 = document.getElementById('output3')
+
+const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
 
 
@@ -19,7 +23,7 @@ userCompleteSelection.style.display = 'none'
 let userText = ""
 let selections = {}
 
-const interval = setInterval(changeBorderColor, 1000, inputText)
+setInterval(changeBorderColor, 1000, inputText)
 
 let hue = 0
 
@@ -30,6 +34,7 @@ function changeBorderColor(inputBar) {
     }
     submitBtn.style.borderColor = `hsl(${hue}, 100%, 50%)`
     inputBar.style.borderColor = `hsl(${hue}, 100%, 50%)`
+    doneBtn.style.borderColor = `hsl(${hue}, 100%, 50%)`
 }
 
 inputText.addEventListener('input', () => {
@@ -52,6 +57,7 @@ function submitClick() {
         userSelection.style.display = 'flex'
         userCompleteSelection.style.display = 'flex'
         inputContainer.style.display = 'none'
+        searchChoice.style.display = 'none'
         handleInput(userText)
     }
     userText = ""
@@ -78,6 +84,7 @@ doneBtn.addEventListener('click', () => {
         userSelection.style.display = 'none'
         userCompleteSelection.style.display = 'none'
         inputContainer.style.display = 'flex'
+        searchChoice.style.display = 'flex'
         output1.textContent = ''
         output2.textContent = ''
         output3.textContent = ''
@@ -89,12 +96,12 @@ document.addEventListener('click', (clickEvent) => {
         const btnContainer = clickEvent.target.closest('#btn-container')
         const chunkNum = btnContainer.getAttribute('button-id')
         if (clickEvent.target.classList.contains('like-btn')) {
-            selections[chunkNum - 1] = true
+            selections[chunkNum] = true
             const dislikeButton = clickEvent.target.closest('#btn-container').querySelector('.dislike-btn');
             dislikeButton.style.backgroundColor = 'black'
             clickEvent.target.style.backgroundColor = '#65a765'
         } else if (clickEvent.target.classList.contains('dislike-btn')) {
-            selections[chunkNum - 1] = false
+            selections[chunkNum] = false
             const likeButton = clickEvent.target.closest('#btn-container').querySelector('.like-btn');
             clickEvent.target.style.backgroundColor = '#C70039'
             likeButton.style.backgroundColor = 'black'
@@ -104,8 +111,6 @@ document.addEventListener('click', (clickEvent) => {
 
 async function handleInput(userTextInput) {
     const searchChoice = document.querySelector('input[name="searchType"]:checked').value
-    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
     const target = '/api/recommend'
     let data = {
@@ -135,6 +140,24 @@ async function handleInput(userTextInput) {
     }
 }
 
-function handleOutput(selections) {
-    console.log(selections)
+async function handleOutput(selections) {
+
+    const target = '/api/liked'
+
+    try {
+        const response = await fetch(target, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            },
+            body: JSON.stringify(selections)
+        });
+
+        const result = response.ok;
+        console.log(result ? "Good response" : "Bad response")
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
