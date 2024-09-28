@@ -1,0 +1,80 @@
+body {
+    font-family: "Kalam";
+    background-image: url("../images/vinyl.jpg");
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    margin-left: 40px;
+    color: white;
+}
+
+h1 {
+    font-style: bold;
+    font-size: 40px;
+}
+
+form {
+    margin-top: 50px;
+    font-size: 30px;
+}
+
+#error {
+    color: red;
+    font-weight: bold;
+}
+
+#error::before {
+    content: "❌";
+}
+
+#logout {
+    color: lightgreen;
+    font-weight: bold;
+}
+
+#logout::before {
+    content: "✔️";
+}
+
+.input-field {
+    width: 20%;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 10px;
+    transition: ease-in-out 200ms;
+}
+
+.input-field:focus {
+    border-width: 5px;
+}
+
+#submit-btn {
+    border-radius: 10px;
+    width: 80px;
+    height: 40px;
+    margin-top: 20px;
+    background: white;
+    font-size: 16px;
+    overflow: hidden;
+    font-weight: 700;
+}
+
+#submit-btn:hover {
+    background: linear-gradient(#e933ff, #ff3355);
+    color: white;
+}
+
+#redirect-link {
+    text-decoration: none;
+    font-size: 20px;
+    margin-top: 50px;
+    color: white;
+    transition: ease-in 400ms;
+    font-weight: bold;
+}
+
+#redirect-link:hover {
+    font-weight: bold;
+    background: linear-gradient(#e933ff, #ff3355);
+    color: transparent;
+    background-clip: text;
+}
