@@ -17,11 +17,14 @@ public class AppUserService implements UserDetailsService {
     @Autowired
     private AppUserRepository repository;
 
+    private String loggedUsername;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<AppUser> user = repository.findByUserName(username);
         if (user.isPresent()) {
             AppUser au = user.get();
+            loggedUsername = au.getUserName();
             return User.builder()
                     .username(au.getUserName())
                     .password(au.getPassword())
@@ -29,5 +32,9 @@ public class AppUserService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException(username);
         }
+    }
+
+    public String getLoggedUsername() {
+        return loggedUsername;
     }
 }

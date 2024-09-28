@@ -45,6 +45,7 @@ public class MusicAppController {
     }
 
     private Map<String, String> buildResponse(String searchType, String input) {
+        String currUser = userService.getLoggedUsername();
         Map<String, String> rsp = new HashMap<>();
         // TODO! Call LLM function to get requests and store them in the map using the following format:
         // {"song1": "song", "song2": "song", "song3", song}
