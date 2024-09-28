@@ -4,7 +4,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Welcome to our Music App</title>
-    <link rel="stylesheet" href="../static/css/loginstyle.css">
+    <link rel="stylesheet" th:href="@{/css/loginstyle.css}">
     <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
