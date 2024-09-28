@@ -18,14 +18,26 @@
             GrooveGuideAI
         </h1>
     </div>
+    <div id="search-choice">
+        <form action="">
+            <label>
+                Search by genre
+                <input id="search-genre" type="radio" name="searchType" value="genre">
+            </label>
+            <label>
+                Search by artist
+                <input id="search-artist" type="radio" name="searchType" value="artist" checked>
+            </label>
+        </form>
+    </div>
     <div id="user-input-container">
-        <input id="user-input" type="text" placeholder="Enter artist or song here...">
+        <input id="user-input" type="text" placeholder="Enter here after selection...">
         <button id="submit-btn">Submit</button>
     </div>
     <div id="full-output">
         <div class="output-chunk" chunk-id="1">
             <div id="output-container1">
-                <div id="output">
+                <div id="output1">
                     song 1
                     <!-- output inserted here -->
                 </div>
@@ -45,7 +57,7 @@
         </div>
         <div class="output-chunk" chunk-id="2">
             <div id="output-container2">
-                <div id="output">
+                <div id="output2">
                     song 2
                     <!-- output inserted here -->
                 </div>
@@ -65,7 +77,7 @@
         </div>
         <div class="output-chunk" chunk-id="3">
             <div id="output-container3">
-                <div id="output">
+                <div id="output3">
                     song 3
                     <!-- output inserted here -->
                 </div>

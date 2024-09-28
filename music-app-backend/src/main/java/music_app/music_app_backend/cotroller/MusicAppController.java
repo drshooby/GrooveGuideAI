@@ -1,47 +1,72 @@
 package music_app.music_app_backend.cotroller;
 
 import music_app.music_app_backend.DTO.SongDTO;
+import music_app.music_app_backend.service.AppUserService;
 import music_app.music_app_backend.service.LLMService;
 import music_app.music_app_backend.service.SongService;
 import music_app.music_app_backend.service.UserFavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class MusicAppController {
     private final LLMService llmService;
     private final SongService songService;
-    //private final UserService userService;
+    private final AppUserService userService;
     private final UserFavoriteService userFavoriteService;
 
     @Autowired
-    public MusicAppController(LLMService llmService, SongService songService, UserFavoriteService userFavoriteService) {
+    public MusicAppController(LLMService llmService, SongService songService, AppUserService userService, UserFavoriteService userFavoriteService) {
         this.llmService = llmService;
         this.songService = songService;
-        //this.userService = userService;
+        this.userService = userService;
         this.userFavoriteService = userFavoriteService;
     }
 
-    @GetMapping("/recommend")
-    public void test() {
-        String input = "Hikaru Utada";
-        List<SongDTO> recommendations = llmService.recommend(input);
-        for (SongDTO song : recommendations) {
-            System.out.println(song);
-        }
+    /**
+     * User makes their song or genre selection with input on the front-end, this function receives it
+     * @param body format {searchType=*artist or genre*, input=*user text input*}
+     */
+
+    @PostMapping(value = "/api/recommend", consumes = "application/json")
+    public ResponseEntity<Map<String, String>> handleUserChoice(@RequestBody Map<String, String> body) {
+        System.out.println("POST received @ /recommend/api");
+        String searchType = body.get("searchType");
+        String input = body.get("input");
+        Map<String, String> rsp = buildResponse(searchType, input);
+        return ResponseEntity.ok(rsp);
     }
 
-    @GetMapping("/addSong")
-    public String addSong() {
-        SongDTO newSong = new SongDTO("Test Song", "David");
-        songService.insertNewSong(newSong);
-        return "Song added to db";
+    private Map<String, String> buildResponse(String searchType, String input) {
+        Map<String, String> rsp = new HashMap<>();
+        // TODO! Call LLM function to get requests and store them in the map using the following format:
+        // {"song1": "song", "song2": "song", "song3", song}
+        // the songs we send to the front-end are just strings btw, objects are for the backend
+        return rsp;
     }
+
+//    @GetMapping("/recommend")
+//    public void test() {
+//        String input = "Hikaru Utada";
+//        List<SongDTO> recommendations = llmService.recommend(input);
+//        for (SongDTO song : recommendations) {
+//            System.out.println(song);
+//        }
+//    }
+//
+//    @GetMapping("/addSong")
+//    public String addSong() {
+//        SongDTO newSong = new SongDTO("Test Song", "David");
+//        songService.insertNewSong(newSong);
+//        return "Song added to db";
+//    }
 
 //    @GetMapping("/inputUserName")
 //    public void inputUsernameTest() {

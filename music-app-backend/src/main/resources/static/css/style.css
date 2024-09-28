@@ -6,6 +6,27 @@ body {
 #head-container {
     display: flex;
     justify-content: center;
+    color: white;
+}
+
+#search-choice {
+    display: flex;
+    color: white;
+    justify-content: center;
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+#search-choice form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input[type="radio"] {
+    transform: scale(1.8);
+    margin-right: 10px;
+    accent-color: rgb(243, 18, 187);
 }
 
 #head-container h1 {
@@ -108,7 +129,15 @@ body {
     justify-content: center;
 }
 
-#output {
+#output1 {
+    color: white;
+}
+
+#output2 {
+    color: white;
+}
+
+#output3 {
     color: white;
 }
 

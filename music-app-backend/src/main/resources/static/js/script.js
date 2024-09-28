@@ -90,8 +90,32 @@ document.addEventListener('click', (clickEvent) => {
     }
 })
 
-function handleInput(input) {
-    console.log(input)
+async function handleInput(userTextInput) {
+    const searchChoice = document.querySelector('input[name="searchType"]:checked').value
+    const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    const target = '/api/recommend'
+    let data = {
+        searchType: searchChoice,
+        input: userTextInput
+    }
+
+    try {
+        const response = await fetch(target, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        console.log(result);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 function handleOutput(selections) {
