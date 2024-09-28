@@ -25,6 +25,7 @@ public class AppUserService implements UserDetailsService {
         if (user.isPresent()) {
             AppUser au = user.get();
             loggedUsername = au.getUserName();
+            System.out.println("User \"" + loggedUsername + "\" logged in.");
             return User.builder()
                     .username(au.getUserName())
                     .password(au.getPassword())
