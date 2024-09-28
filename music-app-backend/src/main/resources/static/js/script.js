@@ -6,6 +6,13 @@ const inputText = document.getElementById('user-input')
 const submitBtn = document.getElementById('submit-btn')
 const doneBtn = document.getElementById('finish-btn')
 
+const inputContainer = document.getElementById('user-input-container')
+const output1 = document.getElementById('output1')
+const output2 = document.getElementById('output2')
+const output3 = document.getElementById('output3')
+
+
+
 userSelection.style.display = 'none'
 userCompleteSelection.style.display = 'none'
 
@@ -44,6 +51,7 @@ function submitClick() {
         inputText.value = ""
         userSelection.style.display = 'flex'
         userCompleteSelection.style.display = 'flex'
+        inputContainer.style.display = 'none'
         handleInput(userText)
     }
     userText = ""
@@ -69,6 +77,10 @@ doneBtn.addEventListener('click', () => {
         selections = {}
         userSelection.style.display = 'none'
         userCompleteSelection.style.display = 'none'
+        inputContainer.style.display = 'flex'
+        output1.textContent = ''
+        output2.textContent = ''
+        output3.textContent = ''
     }
 })
 
@@ -112,7 +124,12 @@ async function handleInput(userTextInput) {
         });
 
         const result = await response.json();
-        console.log(result);
+        ((res) => {
+            output1.textContent = res.song1
+            output2.textContent = res.song2
+            output3.textContent = res.song3
+        })(result)
+
     } catch (error) {
         console.error('Error:', error);
     }

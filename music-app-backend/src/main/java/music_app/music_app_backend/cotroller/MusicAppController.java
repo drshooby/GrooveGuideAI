@@ -41,7 +41,17 @@ public class MusicAppController {
         String searchType = body.get("searchType");
         String input = body.get("input");
         Map<String, String> rsp = buildResponse(searchType, input);
+        if (!isValidResponse(rsp)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new HashMap<>());
+        }
         return ResponseEntity.ok(rsp);
+    }
+
+    private boolean isValidResponse(Map<String, String> rsp) {
+        return rsp.size() == 3 && rsp.containsKey("song1")
+                && rsp.containsKey("song2") && rsp.containsKey("song3");
     }
 
     private Map<String, String> buildResponse(String searchType, String input) {
@@ -50,6 +60,10 @@ public class MusicAppController {
         // TODO! Call LLM function to get requests and store them in the map using the following format:
         // {"song1": "song", "song2": "song", "song3", song}
         // the songs we send to the front-end are just strings btw, objects are for the backend
+        // example:
+        rsp.put("song1", "Teenage Dream by Katy Perry");
+        rsp.put("song2", "Haunt Muskie by C418");
+        rsp.put("song3", "Heist by Ben Folds");
         return rsp;
     }
 
