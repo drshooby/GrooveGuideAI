@@ -49,6 +49,10 @@ document.addEventListener('keydown', (keyPressed) => {
 })
 
 function submitClick() {
+    const confirmed = confirm("Ready to submit?")
+    if (!confirmed) {
+        return;
+    }
     userText = userText.trim()
     if (!userText) {
         alert("Empty input")
