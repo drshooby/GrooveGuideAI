@@ -59,7 +59,7 @@ form {
 }
 
 #submit-btn:hover {
-    background: linear-gradient(#e933ff, #ff3355);
+    background: linear-gradient(to right, #FFA500, #800080);
     color: white;
 }
 
@@ -74,7 +74,7 @@ form {
 
 #redirect-link:hover {
     font-weight: bold;
-    background: linear-gradient(#e933ff, #ff3355);
+    background: linear-gradient(to right, #FFA500, #800080);
     color: transparent;
     background-clip: text;
 }
