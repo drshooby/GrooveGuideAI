@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -21,6 +18,9 @@ public class MusicAppController {
     private final SongService songService;
     private final AppUserService userService;
     private final UserFavoriteService userFavoriteService;
+
+    private Map<Integer, String> songNames = new HashMap<>();
+
 
     @Autowired
     public MusicAppController(LLMService llmService, SongService songService, AppUserService userService, UserFavoriteService userFavoriteService) {
@@ -36,7 +36,7 @@ public class MusicAppController {
      */
 
     @PostMapping(value = "/api/recommend", consumes = "application/json")
-    public ResponseEntity<Map<String, String>> handleUserChoice(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Map<String, String>> handleUserSearch(@RequestBody Map<String, String> body) {
         System.out.println("POST received @ /recommend/api");
         String searchType = body.get("searchType");
         String input = body.get("input");
@@ -58,14 +58,33 @@ public class MusicAppController {
         String currUser = userService.getLoggedUsername();
         Map<String, String> rsp = new HashMap<>();
         // TODO! Call LLM function to get requests and store them in the map using the following format:
-        // {"song1": "song", "song2": "song", "song3", song}
+        // {"song1": "song", "song2": "song", "song3", song}, the for loop updates everything
         // the songs we send to the front-end are just strings btw, objects are for the backend
+        // song names are in an instance map of this class for access across functions, keys are 1-3
         // example:
-        rsp.put("song1", "Teenage Dream by Katy Perry");
-        rsp.put("song2", "Haunt Muskie by C418");
-        rsp.put("song3", "Heist by Ben Folds");
+        List<String> songs = new ArrayList<>(); // this should be whatever LLM function gives
+        songs.add("Teenage Dream by Katy Perry");
+        songs.add("Haunt Muskie by C418");
+        songs.add("Heist by Ben Folds");
+        for (int i = 1; i <= 3; i++) {
+            this.songNames.put(i, songs.get(i - 1));
+            rsp.put("song" + i, songs.get(i - 1));
+        }
         return rsp;
     }
+
+    @PostMapping(value = "/api/liked", consumes = "application/json")
+    public ResponseEntity<Void> handleUserLikes(@RequestBody Map<Integer, Boolean> body) {
+        System.out.println("POST received @ /liked/api");
+        handleLikesAndDisliked(body);
+        return ResponseEntity.ok().build();
+    }
+
+    private void handleLikesAndDisliked(Map<Integer, Boolean> songNumToLiked) {
+        // TODO! fill this out
+        System.out.println(songNumToLiked);
+    }
+
 
 //    @GetMapping("/recommend")
 //    public void test() {
