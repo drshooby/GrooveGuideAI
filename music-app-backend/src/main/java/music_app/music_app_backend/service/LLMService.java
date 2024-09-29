@@ -33,14 +33,15 @@ public class LLMService {
         String recommendBasedOnInputAndFavorites(String input, List<SongDTO> favoriteSongs);
     }
 
-    public List<SongDTO> recommend(String input) {
+    public List<String> recommend(String input) {
         AiRecommender aiRecommender = AiServices.create(AiRecommender.class, chatLanguageModel);
         String recommendations = aiRecommender.recommendBasedOnInput(input);
+        System.out.println(recommendations);
         String[] li = recommendations.split(",");
 
-        List<SongDTO> songs = new ArrayList<>();
+        List<String> songs = new ArrayList<>();
         for (String songByArtist : li) {
-            songs.add(SongDTO.fromString(songByArtist.trim()));
+            songs.add(songByArtist.trim());
         }
         return songs;
     }

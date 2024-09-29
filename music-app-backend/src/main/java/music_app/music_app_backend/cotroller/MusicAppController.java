@@ -62,13 +62,12 @@ public class MusicAppController {
         // the songs we send to the front-end are just strings btw, objects are for the backend
         // song names are in an instance map of this class for access across functions, keys are 1-3
         // example:
-        List<String> songs = new ArrayList<>(); // this should be whatever LLM function gives
-        songs.add("Teenage Dream by Katy Perry");
-        songs.add("Haunt Muskie by C418");
-        songs.add("Heist by Ben Folds");
+
+        List<String> songs = llmService.recommend(input);
         for (int i = 1; i <= 3; i++) {
             this.songNames.put(i, songs.get(i - 1));
             rsp.put("song" + i, songs.get(i - 1));
+            System.out.println(songs.get(i - 1));
         }
         return rsp;
     }
@@ -82,7 +81,24 @@ public class MusicAppController {
 
     private void handleLikesAndDisliked(Map<Integer, Boolean> songNumToLiked) {
         // TODO! fill this out
-        System.out.println(songNumToLiked);
+        for (Map.Entry<Integer, Boolean> reaction : songNumToLiked.entrySet()) {
+            if (reaction.getValue()) { // If true i.e. if the user liked
+                String songByArtist = songNames.get(reaction.getKey());
+                SongDTO songDTO = createSongDTOFromString(songByArtist);
+                songService.insertNewSong(songDTO);
+                Long songId = songService.findIdBySongName(songDTO.getSongName());
+                Long userId = userService.findIdByUserName(userService.getLoggedUsername());
+                userFavoriteService.addFavorite(userId, songId);
+            }
+        }
+    }
+
+    private SongDTO createSongDTOFromString(String songByArtist) {
+        String[] li = songByArtist.split(" by ");
+        String songName = li[0].replace("\"", "").trim();
+        String artistName = li[1].trim();
+
+        return new SongDTO(songName, artistName);
     }
 
 

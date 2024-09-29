@@ -1,5 +1,6 @@
 package music_app.music_app_backend.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import music_app.music_app_backend.entity.AppUser;
 import music_app.music_app_backend.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,17 @@ public class AppUserService implements UserDetailsService {
 
     public String getLoggedUsername() {
         return loggedUsername;
+    }
+
+    public AppUser findByUserName(String username) {
+        AppUser appUser = repository.findByUserName(username).orElseThrow(() ->
+                new EntityNotFoundException(username + " doesn't exist,"));
+        return appUser;
+    }
+
+    public Long findIdByUserName(String username) {
+        AppUser appUser = repository.findByUserName(username).orElseThrow(() ->
+                new EntityNotFoundException(username + " doesn't exist,"));
+        return appUser.getId();
     }
 }
