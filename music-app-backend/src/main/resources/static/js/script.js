@@ -113,6 +113,8 @@ document.addEventListener('click', (clickEvent) => {
     }
 })
 
+const loadingCircle = document.getElementById('loading-circle-container')
+
 async function handleInput(userTextInput) {
     const searchChoice = document.querySelector('input[name="searchType"]:checked').value
 
@@ -121,6 +123,8 @@ async function handleInput(userTextInput) {
         searchType: searchChoice,
         input: userTextInput
     }
+
+    loadingCircle.style.display = 'flex'
 
     try {
         const response = await fetch(target, {
@@ -138,6 +142,7 @@ async function handleInput(userTextInput) {
             output2.textContent = res.song2
             output3.textContent = res.song3
         })(result)
+        loadingCircle.style.display = 'none'
 
     } catch (error) {
         console.error('Error:', error);
