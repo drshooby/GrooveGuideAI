@@ -69,6 +69,11 @@ public class MusicAppController {
         // song names are in an instance map of this class for access across functions, keys are 1-3
         // example:
 
+        Long userId = userService.findIdByUserName(userService.getLoggedUsername());
+        String favoriteSongs = userFavoriteService.getFavoriteSongsByUserId(userId);
+
+        System.out.println(userService.getLoggedUsername() + " liked " + favoriteSongs + " in the past.");
+
         List<String> songs = llmService.recommend(input);
         for (int i = 1; i <= 3; i++) {
             this.songNames.put(i, songs.get(i - 1));

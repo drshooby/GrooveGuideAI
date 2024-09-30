@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserFavoriteService {
     private final UserFavoriteRepository userFavoriteRepository;
@@ -25,7 +28,18 @@ public class UserFavoriteService {
         userFavoriteRepository.save(userFavorite);
     }
 
-//    public List<SongDTO> getUserFavoriteSongs(Long userId) {
-//        return userFavoriteRepository.findFavoriteSongsByUserId(userId);
-//    }
+    public String getFavoriteSongsByUserId(Long userId) {
+        if (!userFavoriteRepository.existsByUserId(userId)) {
+            System.out.println("This user's favorite songs are not in the database.");
+            return null;
+        }
+
+        List<String> favoriteSongs = userFavoriteRepository.findByUserId(userId)
+                .stream()
+                .map(UserFavorite::getSongInString)
+                .collect(Collectors.toList());
+
+        return String.join(", ", favoriteSongs);
+    }
+
 }

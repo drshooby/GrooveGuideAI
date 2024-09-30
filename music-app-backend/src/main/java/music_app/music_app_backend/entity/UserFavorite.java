@@ -34,8 +34,12 @@ public class UserFavorite {
         this.user = user;
     }
 
-    public Song getSong() {
-        return song;
+    public String getSongInString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(song.getSongName());
+        sb.append(" by ");
+        sb.append(song.getArtistName());
+        return sb.toString();
     }
 
     public void setSong(Song song) {
