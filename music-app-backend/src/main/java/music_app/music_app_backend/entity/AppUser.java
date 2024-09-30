@@ -1,6 +1,7 @@
 package music_app.music_app_backend.entity;
 
 import jakarta.persistence.*;
+import music_app.music_app_backend.DTO.AppUserDTO;
 
 import java.util.Set;
 
@@ -13,7 +14,6 @@ public class AppUser {
 
     @Column(unique = true, nullable = false)
     private String userName;
-
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

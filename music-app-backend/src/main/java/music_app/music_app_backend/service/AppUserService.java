@@ -16,13 +16,13 @@ import java.util.Optional;
 public class AppUserService implements UserDetailsService {
 
     @Autowired
-    private AppUserRepository repository;
+    private AppUserRepository appUserRepository;
 
     private String loggedUsername;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AppUser> user = repository.findByUserName(username);
+        Optional<AppUser> user = appUserRepository.findByUserName(username);
         if (user.isPresent()) {
             AppUser au = user.get();
             loggedUsername = au.getUserName();
@@ -40,14 +40,8 @@ public class AppUserService implements UserDetailsService {
         return loggedUsername;
     }
 
-    public AppUser findByUserName(String username) {
-        AppUser appUser = repository.findByUserName(username).orElseThrow(() ->
-                new EntityNotFoundException(username + " doesn't exist,"));
-        return appUser;
-    }
-
     public Long findIdByUserName(String username) {
-        AppUser appUser = repository.findByUserName(username).orElseThrow(() ->
+        AppUser appUser = appUserRepository.findByUserName(username).orElseThrow(() ->
                 new EntityNotFoundException(username + " doesn't exist,"));
         return appUser.getId();
     }

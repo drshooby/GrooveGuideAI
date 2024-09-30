@@ -1,14 +1,20 @@
 package music_app.music_app_backend.cotroller;
 
 import music_app.music_app_backend.DTO.SongDTO;
+import music_app.music_app_backend.entity.AppUser;
+import music_app.music_app_backend.entity.Song;
+import music_app.music_app_backend.entity.UserFavorite;
 import music_app.music_app_backend.service.AppUserService;
 import music_app.music_app_backend.service.LLMService;
 import music_app.music_app_backend.service.SongService;
 import music_app.music_app_backend.service.UserFavoriteService;
+import org.apache.catalina.User;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.NameNotFoundException;
 import java.util.*;
 
 @RestController
@@ -84,22 +90,36 @@ public class MusicAppController {
         for (Map.Entry<Integer, Boolean> reaction : songNumToLiked.entrySet()) {
             if (reaction.getValue()) { // If true i.e. if the user liked
                 String songByArtist = songNames.get(reaction.getKey());
-                SongDTO songDTO = createSongDTOFromString(songByArtist);
-                songService.insertNewSong(songDTO);
-                Long songId = songService.findIdBySongName(songDTO.getSongName());
-                Long userId = userService.findIdByUserName(userService.getLoggedUsername());
-                userFavoriteService.addFavorite(userId, songId);
+                String[] songList = createSongListFromString(songByArtist);
+
+                songService.insertNewSong(songList[0], songList[1]);
+
+                saveUserFavorite(songList[0], songList[1]);
+
+                System.out.println(songByArtist + " was saved in database for " + userService.getLoggedUsername());
             }
         }
     }
 
-    private SongDTO createSongDTOFromString(String songByArtist) {
-        String[] li = songByArtist.split(" by ");
-        String songName = li[0].replace("\"", "").trim();
-        String artistName = li[1].trim();
-
-        return new SongDTO(songName, artistName);
+    private String[] createSongListFromString(String songByArtist) {
+        String[] songList = songByArtist.split(" by ");
+        songList[0] = songList[0].replace("\"", "").trim();
+        songList[1] = songList[1].replace("\"", "").trim();
+        return songList;
     }
+
+    private void saveUserFavorite(String songName, String artistName) {
+        try {
+            Long userId = userService.findIdByUserName(userService.getLoggedUsername());
+            Long songId = songService.findIdBySongNameAndArtistName(songName, artistName);
+
+            userFavoriteService.addFavorite(userId, songId);
+        } catch (NameNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 
 
 //    @GetMapping("/recommend")
