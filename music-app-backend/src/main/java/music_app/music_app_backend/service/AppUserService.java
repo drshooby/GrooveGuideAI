@@ -1,5 +1,6 @@
 package music_app.music_app_backend.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import music_app.music_app_backend.entity.AppUser;
 import music_app.music_app_backend.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,13 @@ import java.util.Optional;
 public class AppUserService implements UserDetailsService {
 
     @Autowired
-    private AppUserRepository repository;
+    private AppUserRepository appUserRepository;
 
     private String loggedUsername;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AppUser> user = repository.findByUserName(username);
+        Optional<AppUser> user = appUserRepository.findByUserName(username);
         if (user.isPresent()) {
             AppUser au = user.get();
             loggedUsername = au.getUserName();
@@ -37,5 +38,11 @@ public class AppUserService implements UserDetailsService {
 
     public String getLoggedUsername() {
         return loggedUsername;
+    }
+
+    public Long findIdByUserName(String username) {
+        AppUser appUser = appUserRepository.findByUserName(username).orElseThrow(() ->
+                new EntityNotFoundException(username + " doesn't exist,"));
+        return appUser.getId();
     }
 }

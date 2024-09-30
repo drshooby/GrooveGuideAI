@@ -1,14 +1,20 @@
 package music_app.music_app_backend.cotroller;
 
 import music_app.music_app_backend.DTO.SongDTO;
+import music_app.music_app_backend.entity.AppUser;
+import music_app.music_app_backend.entity.Song;
+import music_app.music_app_backend.entity.UserFavorite;
 import music_app.music_app_backend.service.AppUserService;
 import music_app.music_app_backend.service.LLMService;
 import music_app.music_app_backend.service.SongService;
 import music_app.music_app_backend.service.UserFavoriteService;
+import org.apache.catalina.User;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.NameNotFoundException;
 import java.util.*;
 
 @RestController
@@ -62,13 +68,12 @@ public class MusicAppController {
         // the songs we send to the front-end are just strings btw, objects are for the backend
         // song names are in an instance map of this class for access across functions, keys are 1-3
         // example:
-        List<String> songs = new ArrayList<>(); // this should be whatever LLM function gives
-        songs.add("Teenage Dream by Katy Perry");
-        songs.add("Haunt Muskie by C418");
-        songs.add("Heist by Ben Folds");
+
+        List<String> songs = llmService.recommend(input);
         for (int i = 1; i <= 3; i++) {
             this.songNames.put(i, songs.get(i - 1));
             rsp.put("song" + i, songs.get(i - 1));
+            System.out.println(songs.get(i - 1));
         }
         return rsp;
     }
@@ -82,8 +87,39 @@ public class MusicAppController {
 
     private void handleLikesAndDisliked(Map<Integer, Boolean> songNumToLiked) {
         // TODO! fill this out
-        System.out.println(songNumToLiked);
+        for (Map.Entry<Integer, Boolean> reaction : songNumToLiked.entrySet()) {
+            if (reaction.getValue()) { // If true i.e. if the user liked
+                String songByArtist = songNames.get(reaction.getKey());
+                String[] songList = createSongListFromString(songByArtist);
+
+                songService.insertNewSong(songList[0], songList[1]);
+
+                saveUserFavorite(songList[0], songList[1]);
+
+                System.out.println(songByArtist + " was saved in database for " + userService.getLoggedUsername());
+            }
+        }
     }
+
+    private String[] createSongListFromString(String songByArtist) {
+        String[] songList = songByArtist.split(" by ");
+        songList[0] = songList[0].replace("\"", "").trim();
+        songList[1] = songList[1].replace("\"", "").trim();
+        return songList;
+    }
+
+    private void saveUserFavorite(String songName, String artistName) {
+        try {
+            Long userId = userService.findIdByUserName(userService.getLoggedUsername());
+            Long songId = songService.findIdBySongNameAndArtistName(songName, artistName);
+
+            userFavoriteService.addFavorite(userId, songId);
+        } catch (NameNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 
 
 //    @GetMapping("/recommend")

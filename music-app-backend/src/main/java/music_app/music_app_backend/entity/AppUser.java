@@ -1,6 +1,7 @@
 package music_app.music_app_backend.entity;
 
 import jakarta.persistence.*;
+import music_app.music_app_backend.DTO.AppUserDTO;
 
 import java.util.Set;
 
@@ -13,7 +14,6 @@ public class AppUser {
 
     @Column(unique = true, nullable = false)
     private String userName;
-
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -28,7 +28,6 @@ public class AppUser {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -36,7 +35,6 @@ public class AppUser {
     public String getUserName() {
         return userName;
     }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -44,7 +42,6 @@ public class AppUser {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -52,7 +49,6 @@ public class AppUser {
     public Set<UserFavorite> getFavorites() {
         return favorites;
     }
-
     public void setFavorites(Set<UserFavorite> favorites) {
         this.favorites = favorites;
     }

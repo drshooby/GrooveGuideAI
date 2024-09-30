@@ -1,6 +1,6 @@
 package music_app.music_app_backend.cotroller;
 
-import music_app.music_app_backend.DTO.UserDTO;
+import music_app.music_app_backend.DTO.AppUserDTO;
 import music_app.music_app_backend.entity.AppUser;
 import music_app.music_app_backend.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class RegistrationController {
     private PasswordEncoder encoder;
 
     @PostMapping(value = "/req/signup", consumes = "application/json")
-    public String createUser(@RequestBody UserDTO user) {
+    public String createUser(@RequestBody AppUserDTO user) {
         System.out.println(user);
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(new AppUser(user.getUserName(), user.getPassword()));
