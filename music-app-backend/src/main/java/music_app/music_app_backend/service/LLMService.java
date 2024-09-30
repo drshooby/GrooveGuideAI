@@ -24,12 +24,16 @@ public class LLMService {
     interface AiRecommender {
         @UserMessage("Recommend three songs based on the user's following favorites: {{it}}." +
                 "The response should be formatted as:\n" +
-                "Song Name by Artist, Song Name by Artist, Song Name by Artist")
+                "'Song Name by Artist, Song Name by Artist, Song Name by Artist'." +
+                "There should be nothing else present in the response, no adding additional words, and do not acknowledge that you understand" +
+                "the request, just please respond in the format specified, thanks.")
         String recommendBasedOnInput(String input);
 
         @UserMessage("Recommend three songs based on the user's following favorites: {{it}} and {{favoriteSongs}}." +
                 "The response should be formatted as:\n" +
-                "Song Name by Artist, Song Name by Artist, Song Name by Artist")
+                "'Song Name by Artist, Song Name by Artist, Song Name by Artist'." +
+                "There should be nothing else present in the response, no adding additional words, and do not acknowledge that you understand" +
+                "the request, just please respond in the format specified, thanks.")
         String recommendBasedOnInputAndFavorites(String input, List<SongDTO> favoriteSongs);
     }
 
@@ -37,7 +41,11 @@ public class LLMService {
         AiRecommender aiRecommender = AiServices.create(AiRecommender.class, chatLanguageModel);
         String recommendations = aiRecommender.recommendBasedOnInput(input);
         System.out.println(recommendations);
-        String[] li = recommendations.split(",");
+
+
+        String pattern = "[\"']+";
+
+        String[] li = recommendations.trim().replaceAll(pattern, "").split(",");
 
         List<String> songs = new ArrayList<>();
         for (String songByArtist : li) {
