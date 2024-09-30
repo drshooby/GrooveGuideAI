@@ -72,9 +72,18 @@ public class MusicAppController {
         Long userId = userService.findIdByUserName(userService.getLoggedUsername());
         String favoriteSongs = userFavoriteService.getFavoriteSongsByUserId(userId);
 
-        System.out.println(userService.getLoggedUsername() + " liked " + favoriteSongs + " in the past.");
+        List<String> songs;
+        if (favoriteSongs != null) {
+            System.out.println(userService.getLoggedUsername() + " liked " + favoriteSongs + " in the past.");
 
-        List<String> songs = llmService.recommend(input);
+            songs = llmService.recommend(input);
+
+        } else {
+            System.out.println("No favorite songs saved in the database for " + userService.getLoggedUsername() + ".");
+
+            songs = llmService.recommend(input, favoriteSongs);
+        }
+        
         for (int i = 1; i <= 3; i++) {
             this.songNames.put(i, songs.get(i - 1));
             rsp.put("song" + i, songs.get(i - 1));
