@@ -5,30 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" th:href="@{/css/signupstyle.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
     <title>Sign Up</title>
 </head>
 <body>
 <form id="signup-form" action="/registration/signup" method="post">
     <h1>Sign Up</h1>
     <label>
-        Name
+        Username:
         <input id="username" type="text" name="name" required>
     </label>
     <label>
-        Password
-        <input id="password" type="text" name="password" required>
+        Password:
+        <input id="password" type="password" name="password" required>
     </label>
     <button id="submit" type="submit">Sign Up</button>
 </form>
-<a href="/req/login">Back to login</a>
+<div id="redirect-container">
+    <a id="redirect-link" href="/req/login">Back to login</a>
+</div>
+<div id="welcome">
+
+</div>
+<a href="/req/login"></a>
 <script>
-    const form = document.getElementById('signup-form');
+    const form = document.getElementById('signup-form')
+    const welcome = document.getElementById('welcome')
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const user = document.getElementById('username')
+        const pass = document.getElementById('password')
+
+        const username = user.value
+        const password = pass.value
 
         const data = {
             userName: username,
@@ -36,8 +50,8 @@
         };
 
         const target = '/req/signup';
-        const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+        const token = document.querySelector('meta[name="_csrf"]').getAttribute('content')
+        const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
 
 
         try {
@@ -49,13 +63,17 @@
                 },
                 body: JSON.stringify(data)
             });
-
-            const result = await response.json();
-            console.log(result);
+            welcome.style.display = 'flex'
+            const rsp = await response.text()
+            console.log(rsp)
+            welcome.textContent = rsp
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error)
         }
-    });
+
+        user.value = ""
+        pass.value = ""
+    })
 </script>
 </body>
 </html>
