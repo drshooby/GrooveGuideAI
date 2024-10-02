@@ -9,9 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Long> {
+    // Returns empty list, not null when no UserFavorite entities found
+    List<UserFavorite> findByUserId(Long userId);
 
-//    @Query("SELECT uf.song FROM UserFavorite uf WHERE uf.user.id = :userId")
-//    List<SongDTO> findFavoriteSongsByUserId(Long userId);
-
-    boolean existsByUserIdAndSongId(Long userId, Long songId);
+    boolean existsByUserId(Long userId);
 }
