@@ -1,0 +1,91 @@
+body {
+    font-family: "Kalam";
+    background-image: url("../images/cheers.jpg");
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    margin-left: 40px;
+    color: white;
+}
+
+h1 {
+    font-style: bold;
+    font-size: 40px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    font-size: 30px;
+}
+
+#username {
+    width: 20%;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 10px;
+    transition: ease-in-out 200ms;
+}
+
+#username:focus {
+    border-width: 5px;
+}
+
+#password {
+    width: 20%;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 10px;
+    transition: ease-in-out 200ms;
+}
+
+#password:focus {
+    border-width: 5px;
+}
+
+#submit {
+    border-radius: 10px;
+    width: 80px;
+    height: 40px;
+    margin-top: 20px;
+    background: white;
+    font-size: 16px;
+    overflow: hidden;
+    font-weight: 700;
+}
+
+#submit:hover {
+    background: linear-gradient(to right, #FFA500, #800080);
+    color: white;
+}
+
+#redirect-container {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#redirect-link {
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+    transition: ease-in 400ms;
+    font-weight: bold;
+}
+
+#redirect-link:hover {
+    font-weight: bold;
+    background: linear-gradient(to right, #FFA500, #800080);
+    color: transparent;
+    background-clip: text;
+}
+
+#welcome {
+    display: none;
+    font-size: 30px;
+    color: white;
+}
+
+#welcome::after {
+    content: "🥁"
+}
