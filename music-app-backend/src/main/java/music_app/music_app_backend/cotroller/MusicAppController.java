@@ -44,9 +44,8 @@ public class MusicAppController {
     @PostMapping(value = "/api/recommend", consumes = "application/json")
     public ResponseEntity<Map<String, String>> handleUserSearch(@RequestBody Map<String, String> body) {
         System.out.println("POST received @ /recommend/api");
-        String searchType = body.get("searchType");
         String input = body.get("input");
-        Map<String, String> rsp = buildResponse(searchType, input);
+        Map<String, String> rsp = buildResponse(input);
         if (!isValidResponse(rsp)) {
             return ResponseEntity
                     .badRequest()
@@ -60,7 +59,7 @@ public class MusicAppController {
                 && rsp.containsKey("song2") && rsp.containsKey("song3");
     }
 
-    private Map<String, String> buildResponse(String searchType, String input) {
+    private Map<String, String> buildResponse(String input) {
         String currUser = userService.getLoggedUsername();
         Map<String, String> rsp = new HashMap<>();
         // TODO! Call LLM function to get requests and store them in the map using the following format:
@@ -70,6 +69,7 @@ public class MusicAppController {
         // example:
 
         List<String> songs = llmService.recommend(input);
+
         for (int i = 1; i <= 3; i++) {
             this.songNames.put(i, songs.get(i - 1));
             rsp.put("song" + i, songs.get(i - 1));

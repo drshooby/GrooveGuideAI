@@ -6,7 +6,6 @@ const inputText = document.getElementById('user-input')
 const submitBtn = document.getElementById('submit-btn')
 const doneBtn = document.getElementById('finish-btn')
 
-const searchChoice = document.getElementById('search-choice')
 const inputContainer = document.getElementById('user-input-container')
 const output1 = document.getElementById('output1')
 const output2 = document.getElementById('output2')
@@ -14,8 +13,6 @@ const output3 = document.getElementById('output3')
 
 const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-
 
 userSelection.style.display = 'none'
 userCompleteSelection.style.display = 'none'
@@ -48,6 +45,7 @@ document.addEventListener('keydown', (keyPressed) => {
     }
 })
 
+
 function submitClick() {
     const confirmed = confirm("Ready to submit?")
     if (!confirmed) {
@@ -61,7 +59,6 @@ function submitClick() {
         userSelection.style.display = 'flex'
         userCompleteSelection.style.display = 'flex'
         inputContainer.style.display = 'none'
-        searchChoice.style.display = 'none'
         handleInput(userText)
     }
     userText = ""
@@ -88,7 +85,6 @@ doneBtn.addEventListener('click', () => {
         userSelection.style.display = 'none'
         userCompleteSelection.style.display = 'none'
         inputContainer.style.display = 'flex'
-        searchChoice.style.display = 'flex'
         output1.textContent = ''
         output2.textContent = ''
         output3.textContent = ''
@@ -116,11 +112,9 @@ document.addEventListener('click', (clickEvent) => {
 const loadingCircle = document.getElementById('loading-circle-container')
 
 async function handleInput(userTextInput) {
-    const searchChoice = document.querySelector('input[name="searchType"]:checked').value
 
     const target = '/api/recommend'
     let data = {
-        searchType: searchChoice,
         input: userTextInput
     }
 
@@ -137,11 +131,9 @@ async function handleInput(userTextInput) {
         });
 
         const result = await response.json();
-        ((res) => {
-            output1.textContent = res.song1
-            output2.textContent = res.song2
-            output3.textContent = res.song3
-        })(result)
+        output1.textContent = result.song1
+        output2.textContent = result.song2
+        output3.textContent = result.song3
         loadingCircle.style.display = 'none'
 
     } catch (error) {
