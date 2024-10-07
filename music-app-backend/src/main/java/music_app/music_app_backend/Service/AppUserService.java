@@ -1,8 +1,8 @@
-package music_app.music_app_backend.service;
+package music_app.music_app_backend.Service;
 
 import jakarta.persistence.EntityNotFoundException;
-import music_app.music_app_backend.entity.AppUser;
-import music_app.music_app_backend.repository.AppUserRepository;
+import music_app.music_app_backend.Entity.AppUser;
+import music_app.music_app_backend.Repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

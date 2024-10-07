@@ -1,7 +1,8 @@
-package music_app.music_app_backend.entity;
+package music_app.music_app_backend.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.Collections;
 import java.util.Set;
 
 @Entity
@@ -21,42 +22,28 @@ public class Song {
     private Set<UserFavorite> favoriteSongs;
 
     public Song() {}
-    public Song(Long id) { setId(id); }
+    public Song(Long id) { this.id = id; }
     public Song(String songName, String artistName) {
-        setSongName(songName);
-        setArtistName(artistName);
+        this.songName = songName;
+        this.artistName = artistName;
     }
-
 
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getSongName() {
         return songName;
     }
-
-    public void setSongName(String songName) {
-        this.songName = songName;
-    }
-
     public String getArtistName() {
         return artistName;
     }
 
-    public void setArtistName(String artistName) {
-        this.artistName = artistName;
-    }
-
-    public Set<UserFavorite> getFavoriteSongs() {
-        return favoriteSongs;
-    }
-
-    public void setFavoriteSongs(Set<UserFavorite> favoriteSongs) {
-        this.favoriteSongs = favoriteSongs;
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Song ID: " + getId());
+        sb.append("Name of song: " + getSongName());
+        sb.append("Name of artist: " + getArtistName());
+        return sb.toString();
     }
 }

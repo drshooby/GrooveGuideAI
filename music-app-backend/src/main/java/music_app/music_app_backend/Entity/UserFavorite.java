@@ -1,4 +1,4 @@
-package music_app.music_app_backend.entity;
+package music_app.music_app_backend.Entity;
 
 
 import jakarta.persistence.*;
@@ -18,20 +18,10 @@ public class UserFavorite {
     @JoinColumn(name = "song_id", nullable = false)
     private Song song;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public AppUser getUser() {
-        return user;
-    }
-
-    public void setUser(AppUser user) {
-        this.user = user;
+    public UserFavorite() {}
+    public UserFavorite(AppUser appUser, Song song) {
+        this.user = appUser;
+        this.song = song;
     }
 
     public String getSongInString() {
@@ -40,9 +30,5 @@ public class UserFavorite {
         sb.append(" by ");
         sb.append(song.getArtistName());
         return sb.toString();
-    }
-
-    public void setSong(Song song) {
-        this.song = song;
     }
 }

@@ -1,20 +1,13 @@
-package music_app.music_app_backend.service;
+package music_app.music_app_backend.Service;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.structured.Description;
-import music_app.music_app_backend.DTO.SongDTO;
-import music_app.music_app_backend.entity.Song;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.service.*;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LLMService {

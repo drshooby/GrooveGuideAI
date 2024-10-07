@@ -1,6 +1,6 @@
 package music_app.music_app_backend.DTO;
 
-import music_app.music_app_backend.entity.AppUser;
+import music_app.music_app_backend.Entity.AppUser;
 
 public class AppUserDTO {
     private Long id;

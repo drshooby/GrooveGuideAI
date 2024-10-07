@@ -1,15 +1,9 @@
-package music_app.music_app_backend.cotroller;
+package music_app.music_app_backend.Cotroller;
 
-import music_app.music_app_backend.DTO.SongDTO;
-import music_app.music_app_backend.entity.AppUser;
-import music_app.music_app_backend.entity.Song;
-import music_app.music_app_backend.entity.UserFavorite;
-import music_app.music_app_backend.service.AppUserService;
-import music_app.music_app_backend.service.LLMService;
-import music_app.music_app_backend.service.SongService;
-import music_app.music_app_backend.service.UserFavoriteService;
-import org.apache.catalina.User;
-import org.springframework.aop.scope.ScopedProxyUtils;
+import music_app.music_app_backend.Service.AppUserService;
+import music_app.music_app_backend.Service.LLMService;
+import music_app.music_app_backend.Service.SongService;
+import music_app.music_app_backend.Service.UserFavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,7 +1,6 @@
-package music_app.music_app_backend.cotroller;
+package music_app.music_app_backend.Cotroller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

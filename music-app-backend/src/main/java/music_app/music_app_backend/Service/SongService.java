@@ -1,18 +1,12 @@
-package music_app.music_app_backend.service;
+package music_app.music_app_backend.Service;
 
 import jakarta.persistence.EntityNotFoundException;
-import music_app.music_app_backend.DTO.SongDTO;
-import music_app.music_app_backend.entity.AppUser;
-import music_app.music_app_backend.entity.Song;
-import music_app.music_app_backend.repository.SongRepository;
-import org.springframework.aop.scope.ScopedProxyUtils;
+import music_app.music_app_backend.Entity.Song;
+import music_app.music_app_backend.Repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.naming.NameNotFoundException;
-import java.util.Optional;
 
 @Service
 public class SongService {
