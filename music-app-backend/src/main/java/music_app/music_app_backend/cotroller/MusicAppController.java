@@ -62,25 +62,19 @@ public class MusicAppController {
     private Map<String, String> buildResponse(String input) {
         String currUser = userService.getLoggedUsername();
         Map<String, String> rsp = new HashMap<>();
-        // TODO! Call LLM function to get requests and store them in the map using the following format:
-        // {"song1": "song", "song2": "song", "song3", song}, the for loop updates everything
-        // the songs we send to the front-end are just strings btw, objects are for the backend
-        // song names are in an instance map of this class for access across functions, keys are 1-3
-        // example:
 
-        Long userId = userService.findIdByUserName(userService.getLoggedUsername());
+        Long userId = userService.findIdByUserName(currUser);
         String favoriteSongs = userFavoriteService.getFavoriteSongsByUserId(userId);
 
         List<String> songs;
         if (favoriteSongs != null) {
-            System.out.println(userService.getLoggedUsername() + " liked " + favoriteSongs + " in the past.");
-
-            songs = llmService.recommend(input);
+            System.out.println(currUser + " liked " + favoriteSongs + " in the past.");
+            songs = llmService.recommend(input, favoriteSongs);
 
         } else {
-            System.out.println("No favorite songs saved in the database for " + userService.getLoggedUsername() + ".");
-
-            songs = llmService.recommend(input, favoriteSongs);
+            System.out.println("No favorite songs saved in the database for " + currUser + ".");
+            songs = llmService.recommend(input);
+            //songs = llmService.recommendByPOJO(input);
         }
         for (int i = 1; i <= 3; i++) {
             this.songNames.put(i, songs.get(i - 1));
@@ -98,7 +92,6 @@ public class MusicAppController {
     }
 
     private void handleLikesAndDisliked(Map<Integer, Boolean> songNumToLiked) {
-        // TODO! fill this out
         for (Map.Entry<Integer, Boolean> reaction : songNumToLiked.entrySet()) {
             if (reaction.getValue()) { // If true i.e. if the user liked
                 String songByArtist = songNames.get(reaction.getKey());
@@ -130,63 +123,4 @@ public class MusicAppController {
             System.out.println(e.getMessage());
         }
     }
-
-
-
-
-//    @GetMapping("/recommend")
-//    public void test() {
-//        String input = "Hikaru Utada";
-//        List<SongDTO> recommendations = llmService.recommend(input);
-//        for (SongDTO song : recommendations) {
-//            System.out.println(song);
-//        }
-//    }
-//
-//    @GetMapping("/addSong")
-//    public String addSong() {
-//        SongDTO newSong = new SongDTO("Test Song", "David");
-//        songService.insertNewSong(newSong);
-//        return "Song added to db";
-//    }
-
-//    @GetMapping("/inputUserName")
-//    public void inputUsernameTest() {
-//        String userName = "Koichi1212";
-//        String input = "Ed Sheeran";
-//        String password = "";
-//        UserDTO userDTO = userService.findUserByUserName(userName, password);
-//        List<SongDTO> favoriteSongs;
-//        favoriteSongs = userFavoriteService.getUserFavoriteSongs(userDTO.getId());
-//        List<SongDTO> recommendations;
-//        if (favoriteSongs.isEmpty()) {
-//            recommendations = llmService.recommend(input);
-//        } else {
-//            recommendations = llmService.recommend(input, favoriteSongs);
-//        }
-//        for (SongDTO song : recommendations) {
-//            System.out.println(song);
-//        }
-//    }
-//
-//    @GetMapping("/inputUserNames/{userName}")
-//    public ResponseEntity<String> inputUsernameTest2(@PathVariable String userName) {
-//        String input = "Ed Sheeran"; // dao
-//        UserDTO userDTO = userService.findUserByUserName(userName, "");
-//        List<SongDTO> favoriteSongs;
-//        favoriteSongs = userFavoriteService.getUserFavoriteSongs(userDTO.getId());
-//        List<SongDTO> recommendations;
-//        if (favoriteSongs.isEmpty()) {
-//            recommendations = llmService.recommend(input);
-//        } else {
-//            recommendations = llmService.recommend(input, favoriteSongs);
-//        }
-//        for (SongDTO song : recommendations) {
-//            System.out.println(song);
-//        }
-//
-//        return ResponseEntity.ok(userName);
-//    }
-
-
 }
