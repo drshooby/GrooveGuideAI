@@ -1,4 +1,4 @@
-package music_app.music_app_backend.cotroller;
+package music_app.music_app_backend.Cotroller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
-package music_app.music_app_backend.repository;
+package music_app.music_app_backend.Repository;
 
-import music_app.music_app_backend.entity.Song;
+import music_app.music_app_backend.Entity.Song;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
