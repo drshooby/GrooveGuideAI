@@ -12,6 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+/**
+ * Spring Login Tutorial: <a href="https://youtu.be/X7pGCmVxx10">...</a>
+ */
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
