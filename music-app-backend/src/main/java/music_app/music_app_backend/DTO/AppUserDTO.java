@@ -31,8 +31,4 @@ public class AppUserDTO {
         this.password = password;
     }
     public String getPassword() { return password; }
-
-    public static AppUserDTO fromEntity(AppUser user) {
-        return new AppUserDTO(user.getId(), user.getUserName());
-    }
 }

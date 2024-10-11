@@ -26,10 +26,6 @@ public class SongService {
         System.out.println(songName + " by " + artistName + " is already in database.");
     }
 
-    public Long findIdBySongName(String songName) {
-        return songRepository.findIdBySongName(songName);
-    }
-
     public Long findIdBySongNameAndArtistName(String songName, String artistName) throws NameNotFoundException {
         Song song = songRepository.findBySongNameAndArtistName(songName, artistName)
                 .orElseThrow(() -> new EntityNotFoundException(

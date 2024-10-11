@@ -14,10 +14,8 @@ import java.util.Optional;
 
 @Service
 public class AppUserService implements UserDetailsService {
-
     @Autowired
     private AppUserRepository appUserRepository;
-
     private String loggedUsername;
 
     @Override
