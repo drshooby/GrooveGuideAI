@@ -1,9 +1,6 @@
 package music_app.music_app_backend.Cotroller;
 
-import music_app.music_app_backend.Service.AppUserService;
-import music_app.music_app_backend.Service.LLMService;
-import music_app.music_app_backend.Service.SongService;
-import music_app.music_app_backend.Service.UserFavoriteService;
+import music_app.music_app_backend.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,27 +11,24 @@ import java.util.*;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class MusicAppController {
-    private final LLMService llmService;
-    private final SongService songService;
-    private final AppUserService userService;
-    private final UserFavoriteService userFavoriteService;
+    @Autowired
+    private LLMService llmService;
+    @Autowired
+    private SongService songService;
+    @Autowired
+    private AppUserService userService;
+    @Autowired
+    private UserFavoriteService userFavoriteService;
+    @Autowired
+    private FriendshipService friendshipService;
 
     private Map<Integer, String> songNames = new HashMap<>();
 
-
-    @Autowired
-    public MusicAppController(LLMService llmService, SongService songService, AppUserService userService, UserFavoriteService userFavoriteService) {
-        this.llmService = llmService;
-        this.songService = songService;
-        this.userService = userService;
-        this.userFavoriteService = userFavoriteService;
-    }
 
     /**
      * User makes their song or genre selection with input on the front-end, this function receives it
      * @param body format {searchType=*artist or genre*, input=*user text input*}
      */
-
     @PostMapping(value = "/api/recommend", consumes = "application/json")
     public ResponseEntity<Map<String, String>> handleUserSearch(@RequestBody Map<String, String> body) {
         System.out.println("POST received @ /recommend/api");
@@ -58,7 +52,7 @@ public class MusicAppController {
         Map<String, String> rsp = new HashMap<>();
 
         Long userId = userService.findIdByUserName(currUser);
-        String favoriteSongs = userFavoriteService.getFavoriteSongsByUserId(userId);
+        String favoriteSongs = findUsersFavoriteSongs(userId);
 
         List<String> songs;
         if (favoriteSongs != null) {
@@ -116,5 +110,25 @@ public class MusicAppController {
         } catch (NameNotFoundException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private String findUsersFavoriteSongs(Long userId) {
+        return userFavoriteService.getFavoriteSongsByUserId(userId);
+    }
+
+    private List<Long> findFriends(Long userId) {
+        return friendshipService.getFriendsByUserId(userId);
+    }
+
+    private String findFriendsFavoriteSongs(Long userId) {
+        List<Long> friends = findFriends(userId);
+        if (friends != null) {
+           StringBuilder sb = new StringBuilder();
+           for (Long friendId : friends) {
+               sb.append(findUsersFavoriteSongs(friendId));
+           }
+           return sb.toString();
+        }
+        return null;
     }
 }

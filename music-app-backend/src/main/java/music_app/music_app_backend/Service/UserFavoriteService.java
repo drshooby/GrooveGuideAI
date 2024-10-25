@@ -3,6 +3,8 @@ package music_app.music_app_backend.Service;
 import music_app.music_app_backend.Entity.AppUser;
 import music_app.music_app_backend.Entity.Song;
 import music_app.music_app_backend.Entity.UserFavorite;
+import music_app.music_app_backend.Repository.AppUserRepository;
+import music_app.music_app_backend.Repository.SongRepository;
 import music_app.music_app_backend.Repository.UserFavoriteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,12 +15,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserFavoriteService {
-    private final UserFavoriteRepository userFavoriteRepository;
-
     @Autowired
-    public UserFavoriteService(UserFavoriteRepository userFavoriteRepository, AppUserService userService, SongService songService) {
-        this.userFavoriteRepository = userFavoriteRepository;
-    }
+    private UserFavoriteRepository userFavoriteRepository;
 
     @Transactional
     public void addFavorite(Long userId, Long songId) {

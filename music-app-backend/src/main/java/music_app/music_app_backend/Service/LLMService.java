@@ -6,6 +6,7 @@ package music_app.music_app_backend.Service;
  */
 
 import dev.langchain4j.model.output.structured.Description;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -18,6 +19,7 @@ import java.util.List;
 public class LLMService {
     private final ChatLanguageModel chatLanguageModel;
 
+    @Autowired
     public LLMService(ChatLanguageModel chatLanguageModel) {
         this.chatLanguageModel = chatLanguageModel;
     }
