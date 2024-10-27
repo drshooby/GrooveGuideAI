@@ -112,6 +112,10 @@ public class MusicAppController {
         }
     }
 
+    private void addFriendship(Long user1Id, Long user2Id) {
+        friendshipService.addFriendship(user1Id, user2Id);
+    }
+
     private String findUsersFavoriteSongs(Long userId) {
         return userFavoriteService.getFavoriteSongsByUserId(userId);
     }
