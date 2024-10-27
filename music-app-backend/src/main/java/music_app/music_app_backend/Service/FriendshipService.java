@@ -18,6 +18,12 @@ public class FriendshipService {
 
     @Transactional
     public void addFriendship(Long user1Id, Long user2Id) {
+        if (friendshipRepository.existsByUser1IdAndUser2Id(user1Id, user2Id) ||
+                friendshipRepository.existsByUser1IdAndUser2Id(user2Id, user1Id)) {
+            System.out.println("User " + user1Id + " and User " + user2Id + " are already friends.");
+            return;
+        }
+
         Friendship friendship1 = new Friendship(
                 new AppUser(user1Id), new AppUser(user2Id));
         Friendship friendship2 = new Friendship(
