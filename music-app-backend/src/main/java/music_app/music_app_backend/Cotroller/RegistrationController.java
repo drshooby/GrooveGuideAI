@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class RegistrationController {
 
@@ -20,10 +23,13 @@ public class RegistrationController {
     private PasswordEncoder encoder;
 
     @PostMapping(value = "/req/signup", consumes = "application/json")
-    public ResponseEntity<String> createUser(@RequestBody AppUserDTO user) {
+    public ResponseEntity<Map<String, String>> createUser(@RequestBody AppUserDTO user) {
         System.out.println(user);
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(new AppUser(user.getUserName(), user.getPassword()));
-        return ResponseEntity.ok("User registered successfully");
+        Map<String, String> rsp = new HashMap<>();
+        rsp.put("messageContent", "User registered successfully");
+        rsp.put("successStatus", "ok");
+        return ResponseEntity.ok(rsp);
     }
 }
