@@ -12,6 +12,9 @@ const output1 = document.getElementById('output1')
 const output2 = document.getElementById('output2')
 const output3 = document.getElementById('output3')
 
+const friendInput = document.getElementById('friend-input')
+const friendButton = document.getElementById('friend-btn')
+
 const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
@@ -146,6 +149,43 @@ async function handleInput(userTextInput) {
         output2.textContent = result.song2
         output3.textContent = result.song3
         loadingCircle.style.display = 'none'
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+let friendName = ""
+
+friendInput.addEventListener('input', () => {
+    friendName = friendInput.value
+})
+
+friendButton.addEventListener('click', () => {
+    addFriend()
+})
+
+async function addFriend() {
+
+    const target = '/api/friendship'
+
+    let data = {
+        friendName: friendName
+    }
+
+    try {
+        const response = await fetch(target, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            },
+            body: JSON.stringify(data)
+        })
+
+        const result = await response.json()
+
+        console.log(result)
 
     } catch (error) {
         console.error('Error:', error);
