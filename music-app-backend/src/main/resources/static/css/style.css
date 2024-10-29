@@ -163,3 +163,21 @@ body {
         transform: rotate(360deg);
     }
 }
+
+#search-choice {
+    display: flex;
+    color: white;
+    justify-content: center;
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+#search-choice form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+input[type="radio"] {
+    transform: scale(1.8);
+    margin-right: 10px;
+    accent-color: rgb(243, 18, 187);
+}

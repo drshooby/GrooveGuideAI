@@ -32,8 +32,10 @@ public class MusicAppController {
     @PostMapping(value = "/api/recommend", consumes = "application/json")
     public ResponseEntity<Map<String, String>> handleUserSearch(@RequestBody Map<String, String> body) {
         System.out.println("POST received @ /recommend/api");
+        String searchType = body.get("searchType");
         String input = body.get("input");
-        Map<String, String> rsp = buildResponse(input);
+        System.out.println(input);
+        Map<String, String> rsp = buildResponse(input, searchType);
         if (!isValidResponse(rsp)) {
             return ResponseEntity
                     .badRequest()
@@ -47,23 +49,36 @@ public class MusicAppController {
                 && rsp.containsKey("song2") && rsp.containsKey("song3");
     }
 
-    private Map<String, String> buildResponse(String input) {
-        String currUser = userService.getLoggedUsername();
+    private Map<String, String> buildResponse(String input, String searchType) {
+
         Map<String, String> rsp = new HashMap<>();
+        if (!searchType.equals("both") && !searchType.equals("input-only")) {
+            return rsp;
+        }
+
+        String currUser = userService.getLoggedUsername();
 
         Long userId = userService.findIdByUserName(currUser);
-        String favoriteSongs = findUsersFavoriteSongs(userId);
+
+        String favoriteSongs = null;
+        if (searchType.equals("both")) {
+            System.out.println("searching with both");
+            favoriteSongs = findUsersFavoriteSongs(userId);
+        } else {
+            System.out.println("input only");
+        }
 
         List<String> songs;
-        if (favoriteSongs != null) {
-            System.out.println(currUser + " liked " + favoriteSongs + " in the past.");
-            songs = llmService.recommend(input, favoriteSongs);
+        songs = (favoriteSongs != null) ?
+                llmService.recommend(input, favoriteSongs) :
+                llmService.recommend(input);
 
-        } else {
-            System.out.println("No favorite songs saved in the database for " + currUser + ".");
-            songs = llmService.recommend(input);
-            //songs = llmService.recommendByPOJO(input);
+        for (String song : songs) {
+            if (!song.contains("by")) {
+                return rsp;
+            }
         }
+
         for (int i = 1; i <= 3; i++) {
             this.songNames.put(i, songs.get(i - 1));
             rsp.put("song" + i, songs.get(i - 1));
@@ -112,9 +127,9 @@ public class MusicAppController {
         }
     }
 
-    private void addFriendship(Long user1Id, Long user2Id) {
-        friendshipService.addFriendship(user1Id, user2Id);
-    }
+//    private void addFriendship(Long user1Id, Long user2Id) {
+//        friendshipService.addFriendship(user1Id, user2Id);
+//    }
 
     private String findUsersFavoriteSongs(Long userId) {
         return userFavoriteService.getFavoriteSongsByUserId(userId);
