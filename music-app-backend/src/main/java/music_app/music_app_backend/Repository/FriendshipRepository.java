@@ -1,5 +1,6 @@
 package music_app.music_app_backend.Repository;
 
+import music_app.music_app_backend.Entity.AppUser;
 import music_app.music_app_backend.Entity.Friendship;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,5 +14,5 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     boolean existsByUser1Id(Long user1Id);
 
-    boolean existsByUser1IdAndUser2Id(Long user1Id, Long user2Id);
+    boolean existsByUser1AndUser2(AppUser user1, AppUser user2);
 }
