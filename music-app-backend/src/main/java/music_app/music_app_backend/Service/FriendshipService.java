@@ -19,26 +19,26 @@ public class FriendshipService {
     @Autowired
     private FriendshipRepository friendshipRepository;
 
+    // user1 wants to follow user2
     @Transactional
-    public void addFriendship(Long user1Id, Long user2Id) {
-        AppUser user1 = appUserRepository.findById(user1Id)
-                .orElseThrow(() -> new IllegalArgumentException("User " + user1Id + " not found."));
-        AppUser user2 = appUserRepository.findById(user2Id)
-                .orElseThrow(() -> new IllegalArgumentException("User " + user2Id + " not found."));
+    public boolean addFriendship(String user1Name, String user2Name) {
+        AppUser user1 = appUserRepository.findByUserName(user1Name)
+                .orElseThrow(() -> new IllegalArgumentException("User " + user1Name + " not found."));
+        AppUser user2 = appUserRepository.findByUserName(user2Name)
+                .orElseThrow(() -> new IllegalArgumentException("User " + user2Name + " not found."));
 
-        if (friendshipRepository.existsByUser1AndUser2(user1, user2) ||
-                friendshipRepository.existsByUser1AndUser2(user2, user1)) {
+        if (friendshipRepository.existsByUser1AndUser2(user1, user2)) {
             System.out.println("User " + user1.getUserName() + " and User " + user2.getUserName()
                     + " are already friends.");
-            return;
+            return false;
         }
 
         Friendship friendship1 = new Friendship(user1, user2);
-        Friendship friendship2 = new Friendship(user2, user1);
         friendshipRepository.save(friendship1);
-        friendshipRepository.save(friendship2);
+        return true;
     }
 
+    // Find users that the user1 (current user) is following i.e. user2
     public List<Long> getFriendsByUserId(Long userId) {
         if (!friendshipRepository.existsByUser1Id(userId)) {
             System.out.println("This user doesn't have any friends yet.");

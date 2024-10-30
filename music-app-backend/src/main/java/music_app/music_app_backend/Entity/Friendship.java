@@ -18,6 +18,7 @@ public class Friendship {
     private AppUser user2;
 
     public Friendship() {}
+    // user1 follows user2
     public Friendship(AppUser user1, AppUser user2) {
         this.user1 = user1;
         this.user2 = user2;
