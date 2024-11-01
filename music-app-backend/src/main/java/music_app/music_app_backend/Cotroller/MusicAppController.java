@@ -2,6 +2,7 @@ package music_app.music_app_backend.Cotroller;
 
 import music_app.music_app_backend.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,8 @@ public class MusicAppController {
     private UserFavoriteService userFavoriteService;
     @Autowired
     private FriendshipService friendshipService;
+    @Autowired
+    private LastFMService lastFMService;
 
     private Map<Integer, String> songNames = new HashMap<>();
 
@@ -30,12 +33,12 @@ public class MusicAppController {
      * @param body format {searchType=*artist or genre*, input=*user text input*}
      */
     @PostMapping(value = "/api/recommend", consumes = "application/json")
-    public ResponseEntity<Map<String, String>> handleUserSearch(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Map<String, String[]>> handleUserSearch(@RequestBody Map<String, String> body) throws JSONException {
         System.out.println("POST received @ /recommend/api");
         String searchType = body.get("searchType");
         String input = body.get("input");
         System.out.println(input);
-        Map<String, String> rsp = buildResponse(input, searchType);
+        Map<String, String[]> rsp = buildResponse(input, searchType);
         if (!isValidResponse(rsp)) {
             return ResponseEntity
                     .badRequest()
@@ -44,13 +47,13 @@ public class MusicAppController {
         return ResponseEntity.ok(rsp);
     }
 
-    private boolean isValidResponse(Map<String, String> rsp) {
+    private boolean isValidResponse(Map<String, String[]> rsp) {
         return rsp.size() == 3 && rsp.containsKey("song1")
                 && rsp.containsKey("song2") && rsp.containsKey("song3");
     }
 
-    private Map<String, String> buildResponse(String input, String searchType) {
-        Map<String, String> rsp = new HashMap<>();
+    private Map<String, String[]> buildResponse(String input, String searchType) throws JSONException {
+        Map<String, String[]> rsp = new HashMap<>();
 
         String currUser = userService.getLoggedUsername();
         Long userId = userService.findIdByUserName(currUser);
@@ -102,9 +105,12 @@ public class MusicAppController {
         }
 
         for (int i = 1; i <= 3; i++) {
-            this.songNames.put(i, songs.get(i - 1));
-            rsp.put("song" + i, songs.get(i - 1));
-            System.out.println(songs.get(i - 1));
+            String currSong = songs.get(i - 1);
+            songNames.put(i, currSong);
+            String[] songAndTrack = currSong.split("by");
+            String albumCoverLink = lastFMService.getAlbumImageURL(songAndTrack[1].strip(), songAndTrack[0].strip());
+            rsp.put("song" + i, new String[]{currSong, albumCoverLink});
+            System.out.println(currSong);
         }
         return rsp;
     }

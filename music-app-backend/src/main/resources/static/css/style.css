@@ -111,14 +111,20 @@ body {
 
 #output1 {
     color: white;
+    display: flex;
+    flex-direction: column;
 }
 
 #output2 {
     color: white;
+    display: flex;
+    flex-direction: column;
 }
 
 #output3 {
     color: white;
+    display: flex;
+    flex-direction: column;
 }
 
 .output-chunk {

@@ -157,9 +157,26 @@ async function handleInput(userTextInput) {
         if (!result.song1 || !result.song2 || !result.song3) {
             location.reload()
         }
-        output1.textContent = result.song1
-        output2.textContent = result.song2
-        output3.textContent = result.song3
+        output1.textContent = result.song1[0]
+        output2.textContent = result.song2[0]
+        output3.textContent = result.song3[0]
+
+        const img1 = document.createElement("img")
+        const img2 = document.createElement("img")
+        const img3 = document.createElement("img")
+
+        img1.src = result.song1[1]
+        img1.alt = `${result.song1[0]} album cover`
+        output1.appendChild(img1)
+
+        img2.src = result.song2[1]
+        img2.alt = `${result.song2[0]} album cover`
+        output2.appendChild(img2)
+
+        img3.src = result.song3[1]
+        img3.alt = `${result.song3[0]} album cover`
+        output3.appendChild(img3)
+
         loadingCircle.style.display = 'none'
 
     } catch (error) {
