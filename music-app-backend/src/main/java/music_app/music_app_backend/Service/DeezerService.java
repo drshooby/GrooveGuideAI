@@ -27,9 +27,7 @@ public class DeezerService {
             JSONObject json = new JSONObject(response);
 
             if (json.has("data") && json.getJSONArray("data").length() > 0) {
-                // Get the first track from the result
                 JSONObject trackInfo = json.getJSONArray("data").getJSONObject(0);
-                // Get the album information
                 return trackInfo.getJSONObject("album").getString("cover_big");
             }
         } catch (JSONException ignored) {}
