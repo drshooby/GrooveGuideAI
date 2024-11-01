@@ -127,9 +127,9 @@ async function handleInput(userTextInput) {
     let selection = ''
 
     if (searchValues.length === 0) selection = 'input-only'
-    if (searchValues.length === 2) selection = 'both'
     if (searchValues[0] === 'memory') selection = 'memory'
     if (searchValues[0] === 'friend') selection = 'friend'
+    if (searchValues.length === 2) selection = 'both'
 
     console.log(selection)
 
