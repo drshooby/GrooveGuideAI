@@ -52,9 +52,18 @@ public class MusicAppController {
     private Map<String, String> buildResponse(String input, String searchType) {
 
         Map<String, String> rsp = new HashMap<>();
-        if (!searchType.equals("both") && !searchType.equals("input-only")) {
-            return rsp;
+
+        switch (searchType) {
+            case "input-only":
+            case "both":
+            case "memory":
+            case "friend":
+                break;
+            default:
+                return rsp;
         }
+
+        //TODO! update for different search types
 
         String currUser = userService.getLoggedUsername();
 

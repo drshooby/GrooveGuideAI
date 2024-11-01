@@ -119,11 +119,23 @@ const loadingCircle = document.getElementById('loading-circle-container')
 
 async function handleInput(userTextInput) {
 
-    const searchChoice = document.querySelector('input[name="searchType"]:checked').value
+    const searchChoices = document.querySelectorAll('input[name="searchType"]:checked')
+    const searchValues = Array.from(searchChoices).map(box => box.value)
+
+    // 0: Input only, 1: Memory, 2: Friend
+
+    let selection = ''
+
+    if (searchValues.length === 0) selection = 'input-only'
+    if (searchValues.length === 2) selection = 'both'
+    if (searchValues[0] === 'memory') selection = 'memory'
+    if (searchValues[0] === 'friend') selection = 'friend'
+
+    console.log(selection)
 
     const target = '/api/recommend'
     let data = {
-        searchType: searchChoice,
+        searchType: selection,
         input: userTextInput
     }
 
@@ -161,13 +173,16 @@ friendInput.addEventListener('input', () => {
     friendName = friendInput.value
 })
 
-friendButton.addEventListener('click', () => {
+friendButton.addEventListener('click', (e) => {
+    e.preventDefault()
     addFriend()
 })
 
 async function addFriend() {
 
     const target = '/api/friendship'
+
+    if (!friendName) return
 
     let data = {
         friendName: friendName
@@ -186,6 +201,9 @@ async function addFriend() {
         const result = await response.json()
 
         console.log(result)
+
+        alert(result.resultMessage)
+
 
     } catch (error) {
         console.error('Error:', error);

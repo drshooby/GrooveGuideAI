@@ -26,12 +26,11 @@ public class FriendshipController {
         String currUser = userService.getLoggedUsername();
         String friendName = body.get("friendName");
 
-        // TODO! try to create the friendship, if successful return a Map like so { statusMessage: "You are now friends with user *username*" }
         String success = String.format("You are now friends with %s", friendName);
         if (friendshipService.addFriendship(currUser, friendName)) {
-            rsp.put("statusMessage", success);
+            rsp.put("resultMessage", success);
         } else {
-            rsp.put("statusmessage", "Adding friend was not successful.");
+            rsp.put("resultMessage", "Failed to add friend");
         }
         return ResponseEntity.ok(rsp); // placeholder, replace this
     }
