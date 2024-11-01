@@ -22,7 +22,7 @@ public class MusicAppController {
     @Autowired
     private FriendshipService friendshipService;
     @Autowired
-    private LastFMService lastFMService;
+    private DeezerService deezerService;
 
     private final Map<Integer, String> songNames = new HashMap<>();
 
@@ -104,7 +104,7 @@ public class MusicAppController {
             String currSong = songs.get(i - 1);
             songNames.put(i, currSong);
             String[] songAndTrack = currSong.split("by");
-            String albumCoverLink = lastFMService.getAlbumImageURL(songAndTrack[1].strip(), songAndTrack[0].strip());
+            String albumCoverLink = deezerService.getAlbumImageURL(songAndTrack[1].strip(), songAndTrack[0].strip());
             rsp.put("song" + i, new String[]{currSong, albumCoverLink});
             System.out.println(currSong);
         }
