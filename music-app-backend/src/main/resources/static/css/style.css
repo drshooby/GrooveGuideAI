@@ -3,6 +3,13 @@ body {
     font-family: "Kalam";
 }
 
+img {
+    margin-top: 20px;
+    width: 200px;
+    height: 200px;
+    aspect-ratio: 1/1;
+}
+
 #head-container {
     display: flex;
     justify-content: center;
@@ -84,8 +91,13 @@ body {
 #full-output {
     margin-top: 50px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
+}
+
+@media (max-width: 600px) {
+    #full-output {
+        flex-direction: column;
+    }
 }
 
 #full-output button {
@@ -128,6 +140,7 @@ body {
 }
 
 .output-chunk {
+    gap: 50px;
     margin: 30px;
 }
 
