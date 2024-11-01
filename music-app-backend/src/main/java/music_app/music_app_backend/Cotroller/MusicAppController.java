@@ -50,14 +50,43 @@ public class MusicAppController {
     }
 
     private Map<String, String> buildResponse(String input, String searchType) {
-
         Map<String, String> rsp = new HashMap<>();
 
+        String currUser = userService.getLoggedUsername();
+        Long userId = userService.findIdByUserName(currUser);
+
+
+        StringBuilder favoriteSongs = new StringBuilder();
+        List<String> songs;
         switch (searchType) {
             case "input-only":
-            case "both":
+                songs = llmService.recommend(input);
+                break;
             case "memory":
+                favoriteSongs.append(userFavoriteService.getFavoriteSongsByUserId(userId));
+                System.out.println("User " + currUser + " liked these songs before: " + favoriteSongs);
+                songs = (favoriteSongs == null) ? llmService.recommend(input)
+                        : llmService.recommend(input, favoriteSongs.toString());
+                break;
             case "friend":
+                List<Long> friends = friendshipService.getFriendsByUserId(userId);
+                for (Long friendId : friends) {
+                    favoriteSongs.append(userFavoriteService.getFavoriteSongsByUserId(friendId) + ", ");
+                }
+                System.out.println("User " + currUser + "'s friends liked these songs before: " + favoriteSongs);
+                songs = (favoriteSongs == null) ? llmService.recommend(input)
+                        : llmService.recommend(input, favoriteSongs.toString());
+                break;
+            case "both":
+                favoriteSongs.append(userFavoriteService.getFavoriteSongsByUserId(userId) + ", ");
+                System.out.println("User " + currUser + " liked these songs before: " + favoriteSongs);
+                List<Long> friendIds = friendshipService.getFriendsByUserId(userId);
+                for (Long friendId : friendIds) {
+                    favoriteSongs.append(userFavoriteService.getFavoriteSongsByUserId(friendId) + ", ");
+                }
+                System.out.println("User " + currUser + "'s friends liked these songs before: " + favoriteSongs);
+                songs = (favoriteSongs == null) ? llmService.recommend(input)
+                        : llmService.recommend(input, favoriteSongs.toString());
                 break;
             default:
                 return rsp;
@@ -65,22 +94,6 @@ public class MusicAppController {
 
         //TODO! update for different search types
 
-        String currUser = userService.getLoggedUsername();
-
-        Long userId = userService.findIdByUserName(currUser);
-
-        String favoriteSongs = null;
-        if (searchType.equals("both")) {
-            System.out.println("searching with both");
-            favoriteSongs = findUsersFavoriteSongs(userId);
-        } else {
-            System.out.println("input only");
-        }
-
-        List<String> songs;
-        songs = (favoriteSongs != null) ?
-                llmService.recommend(input, favoriteSongs) :
-                llmService.recommend(input);
 
         for (String song : songs) {
             if (!song.contains("by")) {
