@@ -7,7 +7,6 @@ package music_app.music_app_backend.Service;
 
 import dev.langchain4j.model.output.structured.Description;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.service.*;
@@ -39,14 +38,14 @@ public class LLMService {
     interface AiRecommender {
         @UserMessage("Recommend three songs based on the user's following favorites: {{it}}." +
                 "The response should be formatted as:\n" +
-                "'Song Name by Artist, Song Name by Artist, Song Name by Artist'." +
+                "'Song Name by Artist & Song Name by Artist & Song Name by Artist', using '&' for splitting." +
                 "There should be nothing else present in the response, no adding additional words, and do not acknowledge that you understand" +
                 "the request, just please respond in the format specified, thanks.")
         String recommendBasedOnInput(String input);
 
         @UserMessage("Recommend three songs based on the user's following favorites: {{input}} and {{favoriteSongs}}." +
                 "The response should be formatted as:\n" +
-                "'Song Name by Artist, Song Name by Artist, Song Name by Artist'." +
+                "'Song Name by Artist & Song Name by Artist & Song Name by Artist', using '&' for splitting." +
                 "There should be nothing else present in the response, no adding additional words, and do not acknowledge that you understand" +
                 "the request, just please respond in the format specified, thanks.")
         String recommendBasedOnInputAndFavorites(@V("input") String input, @V("favoriteSongs") String favoriteSongs);
@@ -61,7 +60,7 @@ public class LLMService {
 
         String pattern = "[\"']+";
 
-        String[] li = recommendations.trim().replaceAll(pattern, "").split(",");
+        String[] li = recommendations.trim().replaceAll(pattern, "").split("&");
 
         List<String> songs = new ArrayList<>();
         for (String songByArtist : li) {
@@ -78,7 +77,7 @@ public class LLMService {
 
         String pattern = "[\"']+";
 
-        String[] li = recommendations.trim().replaceAll(pattern, "").split(",");
+        String[] li = recommendations.trim().replaceAll(pattern, "").split("\\|");
 
         List<String> songs = new ArrayList<>();
         for (String songByArtist : li) {
