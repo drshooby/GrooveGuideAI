@@ -166,15 +166,15 @@ async function handleInput(userTextInput) {
         const img3 = document.createElement("img")
 
         img1.src = result.song1[1]
-        img1.alt = `${result.song1[0]} album cover`
+        img1.alt = `album cover`
         output1.appendChild(img1)
 
         img2.src = result.song2[1]
-        img2.alt = `${result.song2[0]} album cover`
+        img2.alt = `album cover`
         output2.appendChild(img2)
 
         img3.src = result.song3[1]
-        img3.alt = `${result.song3[0]} album cover`
+        img3.alt = `album cover`
         output3.appendChild(img3)
 
         loadingCircle.style.display = 'none'

@@ -17,7 +17,7 @@ public class LastFMService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String getAlbumImageURL(String artist, String track) throws JSONException {
+    public String getAlbumImageURL(String artist, String track) {
         String encodedArtist = URLEncoder.encode(artist, StandardCharsets.UTF_8);
         String encodedTrack = URLEncoder.encode(track, StandardCharsets.UTF_8);
 
@@ -27,16 +27,17 @@ public class LastFMService {
 
         String response = restTemplate.getForObject(url, String.class);
 
-        JSONObject json = new JSONObject(response);
+        try {
+            JSONObject json = new JSONObject(response);
 
-        if (json.has("track")) {
-            return json.getJSONObject("track")
-                    .getJSONObject("album")
-                    .getJSONArray("image")
-                    .getJSONObject(2)
-                    .getString("#text");
-        }
-
+            if (json.has("track")) {
+                return json.getJSONObject("track")
+                        .getJSONObject("album")
+                        .getJSONArray("image")
+                        .getJSONObject(2)
+                        .getString("#text");
+            }
+        } catch (JSONException ignored) {}
         return "none";
     }
 }
