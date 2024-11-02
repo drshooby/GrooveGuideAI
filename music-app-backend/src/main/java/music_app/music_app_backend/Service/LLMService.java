@@ -12,6 +12,7 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.service.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -77,7 +78,7 @@ public class LLMService {
 
         String pattern = "[\"']+";
 
-        String[] li = recommendations.trim().replaceAll(pattern, "").split("\\|");
+        String[] li = recommendations.trim().replaceAll(pattern, "").split("&");
 
         List<String> songs = new ArrayList<>();
         for (String songByArtist : li) {

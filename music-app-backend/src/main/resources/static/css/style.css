@@ -125,23 +125,29 @@ img {
     color: white;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 #output2 {
     color: white;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 #output3 {
     color: white;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .output-chunk {
-    gap: 50px;
+    gap: 60px;
     margin: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 #finish-btn-container {
