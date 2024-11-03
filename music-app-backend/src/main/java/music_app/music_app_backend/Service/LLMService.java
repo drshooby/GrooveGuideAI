@@ -74,26 +74,15 @@ public class LLMService {
     public List<String> recommend(String input, String favoriteSongs) {
         AiRecommender aiRecommender = AiServices.create(AiRecommender.class, chatLanguageModel);
         String recommendations = aiRecommender.recommendBasedOnInputAndFavorites(input, favoriteSongs);
-
         String pattern = "[\"']+";
 
-        String[] li = recommendations.trim().replaceAll(pattern, "").split("\\|");
+        String[] li = recommendations.trim().replaceAll(pattern, "").split("&");
 
         List<String> songs = new ArrayList<>();
         for (String songByArtist : li) {
             songs.add(songByArtist.trim());
         }
         return songs;
-    }
-
-    public List<String> recommendByPOJO(String input) {
-        AiRecommender aiRecommender = AiServices.create(AiRecommender.class, chatLanguageModel);
-        RecommendedSong song = aiRecommender.recommendAsStructuredOutput(input);
-
-        List<String> songsStr = new ArrayList<>();
-        System.out.println(song);
-
-        return songsStr;
     }
 }
 
