@@ -13,7 +13,7 @@ public class DeezerService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String getAlbumImageURL(String artist, String track) {
+    public String[] getAlbumImageURL(String artist, String track) {
         String encodedArtist = URLEncoder.encode(artist, StandardCharsets.UTF_8);
         String encodedTrack = URLEncoder.encode(track, StandardCharsets.UTF_8);
 
@@ -28,9 +28,15 @@ public class DeezerService {
 
             if (json.has("data") && json.getJSONArray("data").length() > 0) {
                 JSONObject trackInfo = json.getJSONArray("data").getJSONObject(0);
-                return trackInfo.getJSONObject("album").getString("cover_big");
+                return new String[]{
+                        trackInfo
+                                .getJSONObject("album")
+                                .getString("cover_big"),
+                        trackInfo
+                                .getString("link")
+                };
             }
         } catch (JSONException ignored) {}
-        return "none";
+        return new String[]{};
     }
 }

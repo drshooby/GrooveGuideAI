@@ -81,8 +81,11 @@ public class MusicAppController {
             String currSong = songs.get(i - 1);
             songNames.put(i, currSong);
             String[] songAndTrack = currSong.split("by");
-            String albumCoverLink = deezerService.getAlbumImageURL(songAndTrack[1].strip(), songAndTrack[0].strip());
-            rsp.put("song" + i, new String[]{currSong, albumCoverLink});
+            String[] albumCoverAndLink = deezerService.getAlbumImageURL(songAndTrack[1].strip(), songAndTrack[0].strip());
+            String[] output = albumCoverAndLink.length == 2 ?
+                    new String[]{currSong, albumCoverAndLink[0], albumCoverAndLink[1]} :
+                    new String[]{currSong, "", ""};
+            rsp.put("song" + i, output);
             System.out.println(currSong);
         }
         return rsp;

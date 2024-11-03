@@ -161,21 +161,32 @@ async function handleInput(userTextInput) {
         output2.textContent = result.song2[0]
         output3.textContent = result.song3[0]
 
-        const img1 = document.createElement("img")
-        const img2 = document.createElement("img")
-        const img3 = document.createElement("img")
+        const a1 = document.createElement("a");
+        a1.href = result.song1[2];
+        a1.target = "_blank"
+        const im1 = document.createElement("img");
+        im1.src = result.song1[1];
+        im1.alt = "album cover";
+        a1.appendChild(im1);
+        output1.appendChild(a1);
 
-        img1.src = result.song1[1]
-        img1.alt = `album cover`
-        output1.appendChild(img1)
+        const a2 = document.createElement("a");
+        a2.href = result.song2[2];
+        a2.target = "_blank"
+        const im2 = document.createElement("img");
+        im2.src = result.song2[1];
+        im2.alt = "album cover";
+        a2.appendChild(im2);
+        output2.appendChild(a2);
 
-        img2.src = result.song2[1]
-        img2.alt = `album cover`
-        output2.appendChild(img2)
-
-        img3.src = result.song3[1]
-        img3.alt = `album cover`
-        output3.appendChild(img3)
+        const a3 = document.createElement("a");
+        a3.href = result.song3[2];
+        a3.target = "_blank"
+        const im3 = document.createElement("img");
+        im3.src = result.song3[1];
+        im3.alt = "album cover";
+        a3.appendChild(im3);
+        output3.appendChild(a3);
 
         loadingCircle.style.display = 'none'
 
